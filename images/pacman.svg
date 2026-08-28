@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#0d0d0d"/>
+  <circle cx="100" cy="100" r="70" fill="#ffd700" stroke="#ccac00" stroke-width="2"/>
+  <path d="M100 100 L170 70 A70 70 0 0 1 170 130 Z" fill="#0d0d0d"/>
+  <circle cx="125" cy="75" r="5" fill="#0d0d0d"/>
+  <text x="100" y="185" text-anchor="middle" fill="#ffd700" font-family="Arial,sans-serif" font-size="20" font-weight="bold">PAC-MAN</text>
+</svg>
