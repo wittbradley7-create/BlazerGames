@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#ff7043"/>
+  <circle cx="100" cy="80" r="12" fill="#fff"/>
+  <line x1="100" y1="92" x2="100" y2="120" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <line x1="100" y1="105" x2="80" y2="115" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <line x1="100" y1="105" x2="120" y2="115" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <line x1="100" y1="120" x2="88" y2="150" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <line x1="100" y1="120" x2="112" y2="150" stroke="#fff" stroke-width="4" stroke-linecap="round"/>
+  <line x1="100" y1="80" x2="70" y2="55" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="65" cy="50" r="4" fill="#ffd54f"/>
+  <path d="M70 55 Q50 40 40 50 Q35 55 45 60" fill="none" stroke="#ffd54f" stroke-width="3" stroke-linecap="round"/>
+  <text x="100" y="185" text-anchor="middle" fill="#fff" font-family="Arial,sans-serif" font-size="16" font-weight="bold">STICKMAN HOOK</text>
+</svg>
