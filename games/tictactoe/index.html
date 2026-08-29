@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tic-Tac-Toe</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #1b1b2f; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+  h1 { margin-bottom: 12px; font-size: 2rem; }
+  #status { font-size: 1.2rem; margin-bottom: 16px; height: 1.5em; color: #9ad; }
+  #board { display: grid; grid-template-columns: repeat(3, 90px); grid-template-rows: repeat(3, 90px); gap: 8px; }
+  .cell { background: #2b2b4a; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 3rem; font-weight: bold; cursor: pointer; transition: background .2s; user-select: none; }
+  .cell:hover { background: #3a3a5e; }
+  .cell.x { color: #4fc3f7; }
+  .cell.o { color: #ff8a65; }
+  button { margin-top: 18px; padding: 10px 22px; font-size: 1rem; border: none; border-radius: 10px; background: #4fc3f7; color: #1b1b2f; cursor: pointer; font-weight: bold; }
+  button:hover { background: #29b6f6; }
+</style>
+</head>
+<body>
+  <h1>Tic-Tac-Toe</h1>
+  <div id="status">Your turn (X)</div>
+  <div id="board"></div>
+  <button onclick="reset()">New Game</button>
+<script>
+const board = document.getElementById('board');
+const status = document.getElementById('status');
+let cells = Array(9).fill('');
+let over = false;
+const winLines = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+
+function draw() {
+  board.innerHTML = '';
+  cells.forEach((v, i) => {
+    const d = document.createElement('div');
+    d.className = 'cell ' + (v === 'X' ? 'x' : v === 'O' ? 'o' : '');
+    d.textContent = v;
+    d.onclick = () => play(i);
+    board.appendChild(d);
+  });
+}
+
+function winner(b) {
+  for (const [a,b1,c] of winLines) {
+    if (b[a] && b[a] === b[b1] && b[a] === b[c]) return b[a];
+  }
+  if (b.every(x => x)) return 'draw';
+  return null;
+}
+
+function play(i) {
+  if (over || cells[i]) return;
+  cells[i] = 'X';
+  let w = winner(cells);
+  if (w) return end(w);
+  // AI move
+  const best = bestMove(cells, 'O');
+  if (best !== -1) cells[best] = 'O';
+  w = winner(cells);
+  if (w) end(w);
+  draw();
+}
+
+function end(w) {
+  over = true;
+  draw();
+  status.textContent = w === 'draw' ? "It's a draw!" : (w === 'X' ? 'You win!' : 'AI wins!');
+}
+
+function reset() {
+  cells = Array(9).fill('');
+  over = false;
+  status.textContent = 'Your turn (X)';
+  draw();
+}
+
+function bestMove(b, p) {
+  // simple: win if possible, block if possible, else center, else random
+  const opp = p === 'O' ? 'X' : 'O';
+  for (let i = 0; i < 9; i++) {
+    if (!b[i]) { b[i] = p; if (winner(b) === p) { b[i] = ''; return i; } b[i] = ''; }
+  }
+  for (let i = 0; i < 9; i++) {
+    if (!b[i]) { b[i] = opp; if (winner(b) === opp) { b[i] = ''; return i; } b[i] = ''; }
+  }
+  if (!b[4]) return 4;
+  const corners = [0,2,6,8].filter(i => !b[i]);
+  if (corners.length) return corners[Math.floor(Math.random()*corners.length)];
+  const empty = b.map((v,i) => v ? -1 : i).filter(i => i !== -1);
+  return empty.length ? empty[Math.floor(Math.random()*empty.length)] : -1;
+}
+
+draw();
+</script>
+</body>
+</html>

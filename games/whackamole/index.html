@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Whack-a-Mole</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #1e3a1e; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+  h1 { margin-bottom: 6px; }
+  #info { color: #b9f6ca; margin-bottom: 14px; font-size: 1.1rem; }
+  #grid { display: grid; grid-template-columns: repeat(3, 90px); gap: 14px; }
+  .hole { width: 90px; height: 90px; border-radius: 50%; background: #3e2723; display: flex; align-items: center; justify-content: center; font-size: 2.6rem; cursor: pointer; overflow: hidden; user-select: none; }
+  .hole .mole { opacity: 0; transform: translateY(40px); transition: .15s; }
+  .hole.up .mole { opacity: 1; transform: translateY(0); }
+  button { margin-top: 18px; padding: 10px 22px; font-size: 1rem; border: none; border-radius: 10px; background: #ffeb3b; color: #1e3a1e; cursor: pointer; font-weight: bold; }
+</style>
+</head>
+<body>
+  <h1>Whack-a-Mole</h1>
+  <div id="info">Score: 0 &nbsp; Time: 30</div>
+  <div id="grid"></div>
+  <button onclick="start()">Start Game</button>
+<script>
+const grid = document.getElementById('grid');
+const info = document.getElementById('info');
+let score, time, running, spawnT, timerT;
+const holes = [];
+
+for (let i = 0; i < 9; i++) {
+  const d = document.createElement('div');
+  d.className = 'hole';
+  d.innerHTML = '<div class="mole">🦫</div>';
+  d.onclick = () => whack(i);
+  grid.appendChild(d);
+  holes.push(d);
+}
+
+function start() {
+  score = 0; time = 30; running = true;
+  info.textContent = 'Score: 0  Time: 30';
+  clearInterval(spawnT); clearInterval(timerT);
+  spawnT = setInterval(spawn, 700);
+  timerT = setInterval(() => {
+    time--; info.textContent = 'Score: ' + score + '  Time: ' + time;
+    if (time <= 0) { running = false; clearInterval(spawnT); clearInterval(timerT); info.textContent = 'Time up! Final score: ' + score; holes.forEach(h => h.classList.remove('up')); }
+  }, 1000);
+}
+
+function spawn() {
+  if (!running) return;
+  holes.forEach(h => h.classList.remove('up'));
+  const i = Math.floor(Math.random() * 9);
+  holes[i].classList.add('up');
+}
+
+function whack(i) {
+  if (!running || !holes[i].classList.contains('up')) return;
+  score++;
+  holes[i].classList.remove('up');
+  info.textContent = 'Score: ' + score + '  Time: ' + time;
+}
+</script>
+</body>
+</html>
