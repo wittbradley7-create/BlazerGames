@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Simon</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { background: #111; color: #fff; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; justify-content: center; min-height: 100vh; }
+  h1 { margin-bottom: 6px; }
+  #level { color: #9ad; margin-bottom: 14px; font-size: 1.1rem; }
+  #pad { position: relative; width: 240px; height: 240px; }
+  .btn { position: absolute; width: 120px; height: 120px; opacity: .5; cursor: pointer; transition: opacity .1s; }
+  .btn.active { opacity: 1; }
+  #g { top: 0; left: 0; background: #4caf50; border-radius: 120px 0 0 0; }
+  #r { top: 0; right: 0; background: #f44336; border-radius: 0 120px 0 0; }
+  #y { bottom: 0; left: 0; background: #ffeb3b; border-radius: 0 0 0 120px; }
+  #b { bottom: 0; right: 0; background: #2196f3; border-radius: 0 0 120px 0; }
+  #center { position: absolute; top: 80px; left: 80px; width: 80px; height: 80px; background: #222; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; cursor: pointer; }
+  button.start { margin-top: 16px; padding: 10px 22px; font-size: 1rem; border: none; border-radius: 10px; background: #fff; color: #111; cursor: pointer; font-weight: bold; }
+</style>
+</head>
+<body>
+  <h1>Simon</h1>
+  <div id="level">Press Start</div>
+  <div id="pad">
+    <div class="btn" id="g" data-c="g"></div>
+    <div class="btn" id="r" data-c="r"></div>
+    <div class="btn" id="y" data-c="y"></div>
+    <div class="btn" id="b" data-c="b"></div>
+    <div id="center">GO</div>
+  </div>
+  <button class="start" onclick="startGame()">Start</button>
+<script>
+const pads = ['g','r','y','b'];
+const sounds = { g:261.63, r:329.63, y:392.00, b:523.25 };
+let seq = [], user = [], level = 0, active = false, audioCtx;
+const levelEl = document.getElementById('level');
+const center = document.getElementById('center');
+
+function beep(freq, t) {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  const o = audioCtx.createOscillator(), g = audioCtx.createGain();
+  o.frequency.value = freq; o.connect(g); g.connect(audioCtx.destination);
+  g.gain.setValueAtTime(.2, audioCtx.currentTime);
+  g.gain.exponentialRampToValueAtTime(.001, audioCtx.currentTime + t);
+  o.start(); o.stop(audioCtx.currentTime + t);
+}
+
+function flash(c, dur=400) {
+  const el = document.getElementById(c);
+  el.classList.add('active');
+  beep(sounds[c], dur/1000);
+  setTimeout(() => el.classList.remove('active'), dur);
+}
+
+function startGame() {
+  seq = []; user = []; level = 0; active = false;
+  nextRound();
+}
+
+function nextRound() {
+  level++; user = []; active = false;
+  levelEl.textContent = 'Level ' + level;
+  seq.push(pads[Math.floor(Math.random()*4)]);
+  let i = 0;
+  const play = () => {
+    if (i >= seq.length) { active = true; return; }
+    flash(seq[i]); i++;
+    setTimeout(play, 600);
+  };
+  setTimeout(play, 500);
+}
+
+function handleClick(c) {
+  if (!active) return;
+  flash(c, 250);
+  user.push(c);
+  const idx = user.length - 1;
+  if (user[idx] !== seq[idx]) {
+    active = false; levelEl.textContent = 'Game Over! Reached level ' + level;
+    return;
+  }
+  if (user.length === seq.length) {
+    active = false;
+    setTimeout(nextRound, 800);
+  }
+}
+
+pads.forEach(c => {
+  document.getElementById(c).addEventListener('click', () => handleClick(c));
+});
+center.addEventListener('click', startGame);
+</script>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 200 200">
+  <rect width="200" height="200" fill="#2a1a3e"/>
+  <rect x="30" y="30" width="50" height="50" rx="8" fill="#fff"/>
+  <text x="42" y="68" font-size="34">🚀</text>
+  <rect x="120" y="30" width="50" height="50" rx="8" fill="#fff"/>
+  <text x="132" y="68" font-size="34">🐱</text>
+  <rect x="30" y="120" width="50" height="50" rx="8" fill="#4a3260"/>
+  <text x="42" y="158" font-size="34">?</text>
+  <rect x="120" y="120" width="50" height="50" rx="8" fill="#69f0ae"/>
+  <text x="132" y="158" font-size="34">⚡</text>
+</svg>
