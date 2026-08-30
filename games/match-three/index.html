@@ -25,7 +25,7 @@ let cards=[...syms,...syms].sort(()=>Math.random()-.5),flipped=[],matched=[],loc
 let grid=document.getElementById('grid');grid.innerHTML='';
 cards.forEach((v,i)=>{let d=document.createElement('div');d.className='c';d.dataset.v=v;d.textContent='?';d.onclick=()=>flip(d);grid.appendChild(d)});
 function flip(d){if(lock||flipped.includes(d)||matched.includes(d))return;d.textContent=d.dataset.v;d.style.background='#4cc9f0';flipped.push(d);
-if(flipped.length==2){lock=true;if(flipped[0].dataset.v==flipped[1].dataset.v){matched.push(...flipped);sc++;document.getElementById('score').textContent='Pairs: '+sc+' / 8';flipped=[];lock=false;if(matched.length==16)document.getElementById('msg').textContent='You Win!'}else{setTimeout(()=>{flipped.forEach(f=>{f.textContent='?';f.style.background='#4361ee'});flipped=[];lock=false},700)}}}}
+if(flipped.length==2){lock=true;if(flipped[0].dataset.v==flipped[1].dataset.v){matched.push(...flipped);sc++;document.getElementById('score').textContent='Pairs: '+sc+' / 8';flipped=[];lock=false;if(matched.length==16)document.getElementById('msg').textContent='You Win!'}else{setTimeout(()=>{flipped.forEach(f=>{f.textContent='?';f.style.background='#4361ee'});flipped=[];lock=false},700)}}}
 </script>
 </div>
 </body>

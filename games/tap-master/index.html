@@ -23,7 +23,7 @@ button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#4cc9f0;color:#
 let state='wait',startT=0,tmr=null;let box=document.getElementById('box');
 box.onclick=function(){if(state=='wait'){state='ready';box.textContent='Wait...';box.style.background='#4361ee';tmr=setTimeout(function(){state='go';box.textContent='CLICK!';box.style.background='#4cc9f0';startT=Date.now()},1000+Math.random()*2500)}
 else if(state=='ready'){state='wait';box.textContent='Too Soon! Click to try again';box.style.background='#ffffff'}
-else if(state=='go'){let ms=Date.now()-startT;state='wait';box.textContent=ms+'ms! Click again';box.style.background='#4361ee'}}};
+else if(state=='go'){let ms=Date.now()-startT;state='wait';box.textContent=ms+'ms! Click again';box.style.background='#4361ee'}};
 box.textContent='Click to Start';
 </script>
 </div>

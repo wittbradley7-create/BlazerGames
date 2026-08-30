@@ -99,7 +99,7 @@ let cards=[...syms,...syms].sort(()=>Math.random()-.5),flipped=[],matched=[],loc
 let grid=document.getElementById('grid');grid.innerHTML='';
 cards.forEach((v,i)=>{let d=document.createElement('div');d.className='c';d.dataset.v=v;d.textContent='?';d.onclick=()=>flip(d);grid.appendChild(d)});
 function flip(d){if(lock||flipped.includes(d)||matched.includes(d))return;d.textContent=d.dataset.v;d.style.background='«ACCENT»';flipped.push(d);
-if(flipped.length==2){lock=true;if(flipped[0].dataset.v==flipped[1].dataset.v){matched.push(...flipped);sc++;document.getElementById('score').textContent='Pairs: '+sc+' / 8';flipped=[];lock=false;if(matched.length==16)document.getElementById('msg').textContent='You Win!'}else{setTimeout(()=>{flipped.forEach(f=>{f.textContent='?';f.style.background='«PANEL»'});flipped=[];lock=false},700)}}}}"""
+if(flipped.length==2){lock=true;if(flipped[0].dataset.v==flipped[1].dataset.v){matched.push(...flipped);sc++;document.getElementById('score').textContent='Pairs: '+sc+' / 8';flipped=[];lock=false;if(matched.length==16)document.getElementById('msg').textContent='You Win!'}else{setTimeout(()=>{flipped.forEach(f=>{f.textContent='?';f.style.background='«PANEL»'});flipped=[];lock=false},700)}}}"""
 
 TICTACTOE = """let board=Array(9).fill(''),human='X',ai='O',over=false;
 let g=document.getElementById('grid');g.innerHTML='';
@@ -146,7 +146,7 @@ document.querySelector('button').onclick=start;start();"""
 REACTION = """let state='wait',startT=0,tmr=null;let box=document.getElementById('box');
 box.onclick=function(){if(state=='wait'){state='ready';box.textContent='Wait...';box.style.background='«PANEL»';tmr=setTimeout(function(){state='go';box.textContent='CLICK!';box.style.background='«ACCENT»';startT=Date.now()},1000+Math.random()*2500)}
 else if(state=='ready'){state='wait';box.textContent='Too Soon! Click to try again';box.style.background='«TEXT»'}
-else if(state=='go'){let ms=Date.now()-startT;state='wait';box.textContent=ms+'ms! Click again';box.style.background='«PANEL»'}}};
+else if(state=='go'){let ms=Date.now()-startT;state='wait';box.textContent=ms+'ms! Click again';box.style.background='«PANEL»'}};
 box.textContent='Click to Start';"""
 
 SLIDING = """let n=3,tiles=[];let grid=document.getElementById('grid');
