@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Penalty Shoot</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#1d3557;color:#f1faee;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#e63946;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#f1faee}
+canvas{background:#457b9d;border:3px solid #e63946;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#e63946;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#e63946;color:#1d3557;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Penalty Shoot</h1>
+<div id="box" style="width:260px;height:260px;display:flex;align-items:center;justify-content:center;font-size:22px;text-align:center;background:#457b9d;border:3px solid #e63946;border-radius:14px;cursor:pointer;color:#f1faee;user-select:none"></div><div id="msg"></div>
+<script>
+let state='wait',startT=0,tmr=null;let box=document.getElementById('box');
+box.onclick=function(){if(state=='wait'){state='ready';box.textContent='Wait...';box.style.background='#457b9d';tmr=setTimeout(function(){state='go';box.textContent='CLICK!';box.style.background='#e63946';startT=Date.now()},1000+Math.random()*2500)}
+else if(state=='ready'){state='wait';box.textContent='Too Soon! Click to try again';box.style.background='#f1faee'}
+else if(state=='go'){let ms=Date.now()-startT;state='wait';box.textContent=ms+'ms! Click again';box.style.background='#457b9d'}}};
+box.textContent='Click to Start';
+</script>
+</div>
+</body>
+</html>

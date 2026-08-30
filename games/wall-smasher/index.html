@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Wall Smasher</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#1d3557;color:#f1faee;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#e63946;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#f1faee}
+canvas{background:#457b9d;border:3px solid #e63946;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#e63946;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#e63946;color:#1d3557;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Wall Smasher</h1>
+<div id="score">Score: 0</div><canvas></canvas><div id="msg"></div>
+<script>
+let cv=document.querySelector('canvas'),x=cv.getContext('2d');cv.width=360;cv.height=440;
+let px=150,pw=80,b={x:180,y:300,dx:3,dy:-3},bricks=[],sc=0,over=false,lives=3;
+for(let r=0;r<5;r++)for(let cI=0;cI<8;cI++)bricks.push({x:cI*45+5,y:r*22+30,a:1});
+function move(){if(over)return;b.x+=b.dx;b.y+=b.dy;if(b.x<8||b.x>cv.width-8)b.dx*=-1;if(b.y<8)b.dy*=-1;
+if(b.y>cv.height){lives--;if(lives<=0){over=true;document.getElementById('msg').textContent='Game Over! Score '+sc;return}b={x:180,y:300,dx:3,dy:-3}}
+if(b.y>cv.height-20&&b.x>px&&b.x<px+pw)b.dy=-Math.abs(b.dy);
+bricks.forEach(bk=>{if(bk.a&&b.x>bk.x&&b.x<bk.x+40&&b.y>bk.y&&b.y<bk.y+18){bk.a=0;sc++;document.getElementById('score').textContent='Score: '+sc;b.dy*=-1}});draw();}
+function draw(){x.fillStyle='#457b9d';x.fillRect(0,0,cv.width,cv.height);x.fillStyle='#e63946';x.fillRect(px,cv.height-15,pw,10);x.beginPath();x.arc(b.x,b.y,7,0,7);x.fill();x.fillStyle='#f1faee';bricks.forEach(bk=>{if(bk.a)x.fillRect(bk.x,bk.y,40,16)})}
+function mv(p){px=Math.max(0,Math.min(cv.width-pw,p-cv.getBoundingClientRect().left-pw/2))}
+addEventListener('mousemove',e=>mv(e.clientX));addEventListener('touchmove',e=>mv(e.touches[0].clientX),{passive:true});
+addEventListener('keydown',e=>{if(e.key=='ArrowLeft')px-=20;if(e.key=='ArrowRight')px+=20});
+setInterval(move,16);
+</script>
+</div>
+</body>
+</html>

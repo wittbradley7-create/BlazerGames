@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Turbo Drift</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#3a0ca3;color:#ffffff;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#4cc9f0;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#ffffff}
+canvas{background:#4361ee;border:3px solid #4cc9f0;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#4cc9f0;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#4cc9f0;color:#3a0ca3;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Turbo Drift</h1>
+<div id="score">Score: 0</div><canvas></canvas><div id="msg"></div><button>Restart</button>
+<script>
+let cv=document.querySelector('canvas'),x=cv.getContext('2d');cv.width=320;cv.height=400;
+let px=140,blocks=[],sc=0,over=false,tmr=null;
+addEventListener('keydown',e=>{if(e.key=='ArrowLeft')px-=20;if(e.key=='ArrowRight')px+=20});
+cv.addEventListener('touchmove',e=>{px=Math.max(0,Math.min(cv.width-30,e.touches[0].clientX-cv.getBoundingClientRect().left-15))},{passive:true});
+function loop(){if(over)return;if(Math.random()<.08)blocks.push({x:Math.random()*290,y:0});blocks.forEach(b=>b.y+=4);
+if(blocks.some(b=>b.x>px-5&&b.x<px+35&&b.y>cv.height-40&&b.y<cv.height-10))return lose();
+blocks=blocks.filter(b=>b.y<cv.height);sc++;document.getElementById('score').textContent='Score: '+sc;draw()}
+function draw(){x.fillStyle='#4361ee';x.fillRect(0,0,cv.width,cv.height);x.fillStyle='#4cc9f0';blocks.forEach(b=>x.fillRect(b.x,b.y,30,20));x.fillStyle='#ffffff';x.fillRect(px,cv.height-30,30,30)}
+function lose(){over=true;document.getElementById('msg').textContent='Game Over! Score '+sc}
+function start(){px=140;blocks=[];sc=0;over=false;document.getElementById('score').textContent='Score: 0';document.getElementById('msg').textContent='';clearInterval(tmr);tmr=setInterval(loop,30)}
+document.querySelector('button').onclick=start;start();
+</script>
+</div>
+</body>
+</html>

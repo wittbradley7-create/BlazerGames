@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Coin Clicker</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#003049;color:#ffffff;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#fb8500;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#ffffff}
+canvas{background:#0353a4;border:3px solid #fb8500;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#fb8500;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#fb8500;color:#003049;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Coin Clicker</h1>
+<div>Score: <span id="s">0</span></div><button id="c" style="width:140px;height:140px;border-radius:50%;font-size:24px;background:#fb8500;color:#003049;border:none;cursor:pointer;margin:12px">CLICK</button><div style="display:flex;gap:8px"><button id="b1" style="background:#0353a4;color:#ffffff;border:2px solid #fb8500;padding:8px">+1/click (10)</button><button id="b2" style="background:#0353a4;color:#ffffff;border:2px solid #fb8500;padding:8px">Auto +1/s (25)</button></div>
+<script>
+let sc=0,per=1,auto=0;let btn=document.getElementById('c'),st=document.getElementById('s');
+btn.onclick=function(){sc+=per;st.textContent=sc};
+function buy(p,cst){if(sc>=cst){sc-=cst;if(p=='per')per++;else auto++;st.textContent=sc}}
+document.getElementById('b1').onclick=function(){buy('per',10*per)};
+document.getElementById('b2').onclick=function(){buy('auto',25*(auto+1))};
+setInterval(function(){sc+=auto;st.textContent=sc},1000);
+</script>
+</div>
+</body>
+</html>

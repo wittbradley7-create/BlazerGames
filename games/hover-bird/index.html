@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Hover Bird</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#2d0a31;color:#f8f8f8;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#e0aaff;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#f8f8f8}
+canvas{background:#3d0e44;border:3px solid #e0aaff;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#e0aaff;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#e0aaff;color:#2d0a31;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Hover Bird</h1>
+<div id="score">Score: 0</div><canvas></canvas><div id="msg"></div><button>Restart</button>
+<script>
+let cv=document.querySelector('canvas'),x=cv.getContext('2d');cv.width=320;cv.height=420;
+let by=200,vy=0,pipes=[],sc=0,over=false,tmr=null;
+function tap(){if(over)return;vy=-7}
+addEventListener('keydown',e=>{if(e.code=='Space')tap()});cv.addEventListener('touchstart',tap,{passive:true});cv.addEventListener('mousedown',tap);
+function loop(){if(over)return;vy+=0.4;by+=vy;if(by>cv.height||by<0)return lose();
+if(pipes.length==0||pipes[pipes.length-1].x<cv.width-160)pipes.push({x:cv.width,y:Math.random()*200+60});
+pipes.forEach(p=>{p.x-=2.5;if(p.x==80){sc++;document.getElementById('score').textContent='Score: '+sc}if(80>p.x&&80<p.x+50&&(by<p.y||by>p.y+120))return lose()});pipes=pipes.filter(p=>p.x>-60);draw()}
+function draw(){x.fillStyle='#3d0e44';x.fillRect(0,0,cv.width,cv.height);x.fillStyle='#e0aaff';pipes.forEach(p=>{x.fillRect(p.x,0,50,p.y);x.fillRect(p.x,p.y+120,50,cv.height)});x.fillStyle='#f8f8f8';x.beginPath();x.arc(80,by,12,0,7);x.fill()}
+function lose(){over=true;document.getElementById('msg').textContent='Game Over! Score '+sc}
+function start(){by=200;vy=0;pipes=[];sc=0;over=false;document.getElementById('score').textContent='Score: 0';document.getElementById('msg').textContent='';clearInterval(tmr);tmr=setInterval(loop,22)}
+document.querySelector('button').onclick=start;start();
+</script>
+</div>
+</body>
+</html>
