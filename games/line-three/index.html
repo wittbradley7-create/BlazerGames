@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Line Three</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#003049;color:#ffffff;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#fb8500;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#ffffff}
+canvas{background:#0353a4;border:3px solid #fb8500;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#fb8500;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#fb8500;color:#003049;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Line Three</h1>
+<div id="grid" style="display:grid;grid-template-columns:repeat(3,80px);gap:6px"></div><div id="msg" style="font-size:5vw;color:#fb8500;min-height:1em"></div><button>Reset</button><style>#grid .c{width:80px;height:80px;display:flex;align-items:center;justify-content:center;font-size:42px;background:#0353a4;border:2px solid #fb8500;border-radius:8px;cursor:pointer;font-weight:bold;color:#ffffff}</style>
+<script>
+let board=Array(9).fill(''),human='X',ai='O',over=false;
+let g=document.getElementById('grid');g.innerHTML='';
+for(let i=0;i<9;i++){let d=document.createElement('div');d.className='c';d.dataset.i=i;d.onclick=()=>play(d);g.appendChild(d)}
+function play(d){if(over||board[d.dataset.i])return;board[d.dataset.i]=human;d.textContent=human;d.style.color='#fb8500';if(check(human))return end('You Win!');
+let m=board.findIndex(v=>!v);if(m<0)return end('Draw!');board[m]=ai;let cell=g.children[m];cell.textContent=ai;cell.style.color='#ffffff';if(check(ai))return end('AI Wins!');if(!board.includes(''))end('Draw!')}
+function check(p){let w=[[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];return w.some(l=>l.every(i=>board[i]==p))}
+function end(m){over=true;document.getElementById('msg').textContent=m}
+function reset(){board=Array(9).fill('');over=false;document.getElementById('msg').textContent='';[...g.children].forEach(c=>c.textContent='')}
+document.querySelector('button').onclick=reset;
+</script>
+</div>
+</body>
+</html>

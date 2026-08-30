@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Gopher Game</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#231942;color:#ffffff;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#ff7b00;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#ffffff}
+canvas{background:#5f4bb6;border:3px solid #ff7b00;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#ff7b00;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#ff7b00;color:#231942;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Gopher Game</h1>
+<div><span id="score">Score: 0</span> | <span id="time">Time: 30</span></div><div id="holes" style="display:grid;grid-template-columns:repeat(3,80px);gap:10px;margin:10px"></div><div id="msg"></div><button>Start</button><style>.h{width:80px;height:80px;border-radius:50%;background:#5f4bb6;border:3px solid #ff7b00;position:relative;overflow:hidden;cursor:pointer}.h.up::after{content:"";position:absolute;bottom:0;left:10%;width:60%;height:70%;background:#ffffff;border-radius:50% 50% 0 0}</style>
+<script>
+let sc=0,tmr=null,time=30,active=-1,over=false;let holes=document.getElementById('holes');
+holes.innerHTML='';for(let i=0;i<9;i++){let d=document.createElement('div');d.className='h';d.dataset.i=i;d.onclick=()=>hit(i);holes.appendChild(d)}
+function hit(i){if(over)return;if(i==active){sc++;document.getElementById('score').textContent='Score: '+sc;active=-1}}
+function pop(){if(over)return;active=Math.floor(Math.random()*9);[...holes.children].forEach((h,k)=>h.classList.toggle('up',k==active));setTimeout(()=>{if(active!=-1){active=-1;[...holes.children].forEach(h=>h.classList.remove('up'))}},700)}
+function tick(){time--;document.getElementById('time').textContent='Time: '+time;if(time<=0){over=true;document.getElementById('msg').textContent='Time! Score '+sc;clearInterval(tmr);clearInterval(pp)}}
+let pp;function start(){sc=0;time=30;over=false;document.getElementById('score').textContent='Score: 0';document.getElementById('time').textContent='Time: 30';document.getElementById('msg').textContent='';clearInterval(tmr);clearInterval(pp);tmr=setInterval(tick,1000);pp=setInterval(pop,800)}
+document.querySelector('button').onclick=start;start();
+</script>
+</div>
+</body>
+</html>

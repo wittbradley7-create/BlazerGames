@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Dungeon of Doom</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#231942;color:#ffffff;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#ff7b00;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#ffffff}
+canvas{background:#5f4bb6;border:3px solid #ff7b00;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#ff7b00;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#ff7b00;color:#231942;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Dungeon of Doom</h1>
+<div id="score">Escapes: 0</div><canvas></canvas><div id="msg"></div><button>Restart</button>
+<script>
+let cv=document.querySelector('canvas'),x=cv.getContext('2d');cv.width=360;cv.height=360;
+let G=12,S=cv.width/G,maze=[],px=0.5,py=0.5,mx=11.5,my=11.5,sc=0,over=false,tmr=null;
+function gen(){maze=[];for(let r=0;r<G;r++){maze[r]=[];for(let cI=0;cI<G;cI++)maze[r][cI]=1}carve(1,1)}
+function carve(r,cI){maze[r][cI]=0;let d=[[0,2],[2,0],[0,-2],[-2,0]].sort(()=>Math.random()-.5);d.forEach(dr=>{let nr=r+dr[0],nc=cI+dr[1];if(nr>0&&nr<G&&nc>0&&nc<G&&maze[nr][nc]==1){maze[r+dr[0]/2][cI+dr[1]/2]=0;carve(nr,nc)}})}
+addEventListener('keydown',e=>{let nx=px,ny=py;if(e.key=='ArrowUp')ny-=.5;if(e.key=='ArrowDown')ny+=.5;if(e.key=='ArrowLeft')nx-=.5;if(e.key=='ArrowRight')nx+=.5;if(maze[Math.floor(ny)]&&maze[Math.floor(ny)][Math.floor(nx)]==0){px=nx;py=ny}});
+function loop(){if(over)return;let dx=px-mx,dy=py-my,d=Math.hypot(dx,dy)||1;mx+=dx/d*0.02;my+=dy/d*0.02;
+if(Math.abs(px-mx)<.4&&Math.abs(py-my)<.4)return caught();
+if(Math.floor(px)==G-2&&Math.floor(py)==G-2){sc++;document.getElementById('score').textContent='Escapes: '+sc;gen();px=0.5;py=0.5;mx=11.5;my=11.5}draw()}
+function draw(){x.fillStyle='#000';x.fillRect(0,0,cv.width,cv.height);x.fillStyle='#1a1a1a';for(let r=0;r<G;r++)for(let cI=0;cI<G;cI++)if(maze[r][cI]==1)x.fillRect(cI*S,r*S,S,S);x.fillStyle='#ff7b00';x.beginPath();x.arc(px*S,py*S,8,0,7);x.fill();x.fillStyle='#dc143c';x.beginPath();x.arc(mx*S,my*S,8,0,7);x.fill()}
+function caught(){over=true;document.getElementById('msg').textContent='CAUGHT! Escapes: '+sc}
+function start(){gen();px=0.5;py=0.5;mx=11.5;my=11.5;sc=0;over=false;document.getElementById('score').textContent='Escapes: 0';document.getElementById('msg').textContent='';clearInterval(tmr);tmr=setInterval(loop,40)}
+document.querySelector('button').onclick=start;start();
+</script>
+</div>
+</body>
+</html>

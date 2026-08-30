@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Number Slide</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#0f3460;color:#ffffff;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#f5a623;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#ffffff}
+canvas{background:#164d80;border:3px solid #f5a623;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#f5a623;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#f5a623;color:#0f3460;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Number Slide</h1>
+<div id="grid" style="display:grid;grid-template-columns:repeat(3,70px);gap:4px"></div><div id="msg" style="color:#f5a623;font-size:5vw"></div><button>Shuffle</button><style>.c{width:70px;height:70px;display:flex;align-items:center;justify-content:center;font-size:30px;background:#164d80;border:2px solid #f5a623;border-radius:6px;cursor:pointer;color:#ffffff}.c.e{visibility:hidden}</style>
+<script>
+let n=3,tiles=[];let grid=document.getElementById('grid');
+function init(){tiles=[...Array(n*n-1).keys(),-1].sort(()=>Math.random()-.5);render()}
+function render(){grid.innerHTML='';tiles.forEach((v,i)=>{let d=document.createElement('div');d.className='c';if(v==-1)d.classList.add('e');else d.textContent=v+1;d.onclick=()=>move(i);grid.appendChild(d)})}
+function move(i){let e=tiles.indexOf(-1),r=Math.floor(i/n),c=i%n,re=Math.floor(e/n),ce=e%n;
+if((r==re&&Math.abs(c-ce)==1)||(c==ce&&Math.abs(r-re)==1)){[tiles[i],tiles[e]]=[tiles[e],tiles[i]];render();if(won())document.getElementById('msg').textContent='Solved!'}}
+function won(){for(let i=0;i<tiles.length-1;i++)if(tiles[i]!=i)return false;return true}
+document.querySelector('button').onclick=init;init();
+</script>
+</div>
+</body>
+</html>

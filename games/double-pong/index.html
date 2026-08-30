@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Double Pong</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#003049;color:#ffffff;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#fb8500;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#ffffff}
+canvas{background:#0353a4;border:3px solid #fb8500;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#fb8500;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#fb8500;color:#003049;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Double Pong</h1>
+<div id="score">You 0 - 0 AI</div><canvas></canvas><div id="msg"></div>
+<script>
+let cv=document.querySelector('canvas'),x=cv.getContext('2d');cv.width=360;cv.height=300;
+let py=120,ay=120,b={x:180,y:150,dx:3,dy:2},sc=0,as=0,over=false;
+function loop(){if(over)return;b.x+=b.dx;b.y+=b.dy;if(b.y<6||b.y>cv.height-6)b.dy*=-1;
+if(b.x<24&&b.y>py&&b.y<py+70)b.dx=Math.abs(b.dx);if(b.x>cv.width-24&&b.y>ay&&b.y<ay+70)b.dx=-Math.abs(b.dx);
+if(b.x<0){as++;reset(-1)}if(b.x>cv.width){sc++;reset(1)}ay+=(b.y-ay-35)*0.06;if(sc==7||as==7){over=true;document.getElementById('msg').textContent=(sc==7?'You Win!':'AI Wins!')}draw()}
+function reset(d){b={x:180,y:150,dx:3*d,dy:2};document.getElementById('score').textContent='You '+sc+' - '+as+' AI'}
+function draw(){x.fillStyle='#0353a4';x.fillRect(0,0,cv.width,cv.height);x.fillStyle='#fb8500';x.fillRect(10,py,10,70);x.fillRect(cv.width-20,ay,10,70);x.fillStyle='#ffffff';x.fillRect(b.x-5,b.y-5,10,10)}
+function mv(p){py=Math.max(0,Math.min(cv.height-70,p-cv.getBoundingClientRect().top-35))}
+addEventListener('mousemove',e=>mv(e.clientY));addEventListener('touchmove',e=>mv(e.touches[0].clientY),{passive:true});
+addEventListener('keydown',e=>{if(e.key=='ArrowUp')py-=20;if(e.key=='ArrowDown')py+=20});
+setInterval(loop,16);
+</script>
+</div>
+</body>
+</html>

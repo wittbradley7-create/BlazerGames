@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Insta Click</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#003049;color:#ffffff;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#fb8500;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#ffffff}
+canvas{background:#0353a4;border:3px solid #fb8500;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#fb8500;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#fb8500;color:#003049;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Insta Click</h1>
+<div id="box" style="width:260px;height:260px;display:flex;align-items:center;justify-content:center;font-size:22px;text-align:center;background:#0353a4;border:3px solid #fb8500;border-radius:14px;cursor:pointer;color:#ffffff;user-select:none"></div><div id="msg"></div>
+<script>
+let state='wait',startT=0,tmr=null;let box=document.getElementById('box');
+box.onclick=function(){if(state=='wait'){state='ready';box.textContent='Wait...';box.style.background='#0353a4';tmr=setTimeout(function(){state='go';box.textContent='CLICK!';box.style.background='#fb8500';startT=Date.now()},1000+Math.random()*2500)}
+else if(state=='ready'){state='wait';box.textContent='Too Soon! Click to try again';box.style.background='#ffffff'}
+else if(state=='go'){let ms=Date.now()-startT;state='wait';box.textContent=ms+'ms! Click again';box.style.background='#0353a4'}};
+box.textContent='Click to Start';
+</script>
+</div>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Laser Wars</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#6a040f;color:#fff5f5;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#ffba08;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#fff5f5}
+canvas{background:#9d0208;border:3px solid #ffba08;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#ffba08;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#ffba08;color:#6a040f;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Laser Wars</h1>
+<div id="score">Score: 0</div><canvas></canvas><div id="msg"></div><button>Restart</button>
+<script>
+let cv=document.querySelector('canvas'),x=cv.getContext('2d');cv.width=320;cv.height=400;
+let px=145,enemies=[],bullets=[],sc=0,over=false,tmr=null;
+addEventListener('keydown',e=>{if(e.key=='ArrowLeft')px-=15;if(e.key=='ArrowRight')px+=15;if(e.key==' ')bullets.push({x:px+15,y:cv.height-30})});
+cv.addEventListener('touchstart',e=>{bullets.push({x:px+15,y:cv.height-30});px=Math.max(0,Math.min(cv.width-30,e.touches[0].clientX-cv.getBoundingClientRect().left-15))},{passive:true});
+function loop(){if(over)return;if(Math.random()<.05)enemies.push({x:Math.random()*290,y:0});enemies.forEach(e=>e.y+=2.5);bullets.forEach(b=>b.y-=6);
+bullets.forEach(b=>{enemies=enemies.filter(e=>!(Math.abs(e.x-b.x)<30&&Math.abs(e.y-b.y)<20))});enemies=enemies.filter(e=>e.y<cv.height);
+if(enemies.some(e=>e.y>cv.height-40))return lose();draw()}
+function draw(){x.fillStyle='#9d0208';x.fillRect(0,0,cv.width,cv.height);x.fillStyle='#ffba08';enemies.forEach(e=>x.fillRect(e.x,e.y,30,20));x.fillStyle='#fff5f5';bullets.forEach(b=>x.fillRect(b.x,b.y,4,10));x.fillRect(px,cv.height-30,30,30)}
+function lose(){over=true;document.getElementById('msg').textContent='Game Over! Score '+sc}
+setInterval(function(){sc++;document.getElementById('score').textContent='Score: '+sc},1000);
+function start(){px=145;enemies=[];bullets=[];sc=0;over=false;document.getElementById('score').textContent='Score: 0';document.getElementById('msg').textContent='';clearInterval(tmr);tmr=setInterval(loop,30)}
+document.querySelector('button').onclick=start;start();
+</script>
+</div>
+</body>
+</html>

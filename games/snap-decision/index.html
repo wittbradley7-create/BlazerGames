@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Snap Decision</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overflow:hidden;background:#0b3d2e;color:#eaffea;font-family:'Segoe UI',system-ui,sans-serif}
+#wrap{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;padding:8px}
+h1{font-size:5vw;margin-bottom:6px;color:#39ff14;text-align:center}
+#score{font-size:4vw;margin-bottom:6px;color:#eaffea}
+canvas{background:#0f5132;border:3px solid #39ff14;border-radius:8px;touch-action:none;max-width:96vw;max-height:70vh}
+#msg{font-size:5vw;color:#39ff14;text-align:center;min-height:1em}
+button{margin-top:8px;padding:10px 22px;font-size:4vw;background:#39ff14;color:#0b3d2e;border:none;border-radius:8px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="wrap">
+<h1>Snap Decision</h1>
+<div id="box" style="width:260px;height:260px;display:flex;align-items:center;justify-content:center;font-size:22px;text-align:center;background:#0f5132;border:3px solid #39ff14;border-radius:14px;cursor:pointer;color:#eaffea;user-select:none"></div><div id="msg"></div>
+<script>
+let state='wait',startT=0,tmr=null;let box=document.getElementById('box');
+box.onclick=function(){if(state=='wait'){state='ready';box.textContent='Wait...';box.style.background='#0f5132';tmr=setTimeout(function(){state='go';box.textContent='CLICK!';box.style.background='#39ff14';startT=Date.now()},1000+Math.random()*2500)}
+else if(state=='ready'){state='wait';box.textContent='Too Soon! Click to try again';box.style.background='#eaffea'}
+else if(state=='go'){let ms=Date.now()-startT;state='wait';box.textContent=ms+'ms! Click again';box.style.background='#0f5132'}};
+box.textContent='Click to Start';
+</script>
+</div>
+</body>
+</html>
